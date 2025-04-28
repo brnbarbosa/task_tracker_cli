@@ -13,10 +13,10 @@ class Player:
         self.name = name
         self.gun = gun
 
-a = Player("Bruno", "38")
-b = Player("Carlos", "22")
+    def to_dict(self):
+        return {"name": self.name, "gun": self.gun}
 
-players : list = [a, b]
+
 
 @app.command("init")
 def main(
@@ -33,14 +33,16 @@ def main(
 @app.command()
 def add(name: str, gun: str):
     new = Player(name, gun)
-    players.append(new)
+    new = new.to_dict()
+    with open('tasks.json', 'w') as json_file:
+        json.dump(new, json_file)
 
 
 @app.command("print")
 def print_table():
-    for p in players:
-        table.add_row(p.name, p.gun)
-    print(table)
+    with open('tasks.json') as json_file:
+        data = json.load(json_file)
+        print(data['name'])
 
 
 if __name__ == "__main__":
