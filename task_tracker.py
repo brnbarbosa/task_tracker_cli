@@ -1,16 +1,20 @@
 import json
 import typer
+import os
 from rich import print
 from rich.table import Table
 from rich.console import Console
 from typing_extensions import Annotated
 from datetime import datetime
 
-app = typer.Typer()
+def callback():
+    print("Thinking...")
+
+app = typer.Typer(callback=callback)
 
 FILE_PATH = 'tasks.json'
 
-table = Table("Description", "Date")
+table = Table("Description", "DeadLine", "Status")
 console = Console()
 
 class Task:
@@ -23,16 +27,13 @@ class Task:
 
 
 @app.command("init")
-def main(
-        name: Annotated[str, typer.Argument(help="Your name", rich_help_panel="Task name", show_default=False)],
-        gun: Annotated[str, typer.Argument(help="Your Gun", rich_help_panel="Weapons")] =  "", 
-        formal: Annotated[bool, typer.Option(help="Formal or Informal greeting")]= False,
-        lastname: Annotated[str, typer.Option(help="Last Name", prompt=True, show_default=False)]="Barbosa"):
-
-    if formal:
-        print(f"[red]Good day Ms.[/red] [bold green]{name} {lastname} {gun}[/bold green]")
+def main():
+    if os.path.exists(FILE_PATH):
+        print("File exists")
     else:
-        print(f"Testing {name} {lastname} {gun}")
+        tasks = {}
+        with open(FILE_PATH, 'w') as write_file:
+            json.dump(tasks, write_file)
 
 @app.command('add')
 def add(task: str, date: datetime):
@@ -59,14 +60,12 @@ def add(task: str, date: datetime):
 
 @app.command("print")
 def print_table():
-    table.add_column("Description")
-    table.add_column("Date")
     with open(FILE_PATH) as json_file:
         data = json.load(json_file)
-        #for i in range(len(data)):
-            #Table.add_row(data[i]['description'], data[i]['date'][:10])
+        for i in range(len(data)):
+            table.add_row(data[i]['description'], data[i]['date'][:10])
 
-    Console.print(table)
+    print(table)
 
 if __name__ == "__main__":
     app()
