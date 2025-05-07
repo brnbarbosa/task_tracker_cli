@@ -36,7 +36,7 @@ def main():
             json.dump(tasks, write_file)
 
 @app.command('add')
-def add(task: str, date: datetime):
+def add(task: Annotated[str, typer.Argument(help="Enter the task description")], date: Annotated[datetime, typer.Option(help="Enter the deadline for this task", prompt="Enter the deadline: ")]):
     new = Task(task, date).to_dict()
     task_list = []
 
