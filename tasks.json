@@ -1,14 +1,7 @@
 [
     {
-        "description": "Barbosa",
-        "date": "2025-04-30 00:00:00"
-    },
-    {
-        "description": "Barbosa",
-        "date": "2025-04-30 00:00:00"
-    },
-    {
-        "description": "Carlos",
-        "date": "2025-05-10 00:00:00"
+        "description": "Test3",
+        "deadline": "2027-06-07 00:00:00",
+        "status": "done"
     }
 ]
